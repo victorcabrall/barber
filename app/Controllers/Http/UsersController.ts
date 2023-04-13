@@ -2,6 +2,10 @@ import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import User from '../../Models/User'
 
 export default class UsersController {
+  public async index({ auth, response }: HttpContextContract) {
+    const { id, email, password } = auth.user as User
+    return response.ok({ id, email, password })
+  }
   public async login({ auth, request, response }: HttpContextContract) {
     const { email, password } = request.body()
     const user = await User.findBy('email', email)
@@ -33,8 +37,8 @@ export default class UsersController {
       return response.internalServerError({ error: error })
     }
   }
-  public async user({ auth, response }: HttpContextContract) {
-    const { id, email, password } = auth.user as User
-    return response.ok({ id, email, password })
+  public async logout({ auth, response }: HttpContextContract) {
+    await auth.use('api').revoke()
+    return response.ok({ message: 'token revogado' })
   }
 }
