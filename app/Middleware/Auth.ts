@@ -3,8 +3,6 @@ import type { GuardsList } from '@ioc:Adonis/Addons/Auth'
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 
 export default class AuthMiddleware {
-  protected redirectTo = '/login'
-
   protected async authenticate(auth: HttpContextContract['auth'], guards: (keyof GuardsList)[]) {
     let guardLastAttempted: string | undefined
 
@@ -20,8 +18,7 @@ export default class AuthMiddleware {
     throw new AuthenticationException(
       'Unauthorized access',
       'E_UNAUTHORIZED_ACCESS',
-      guardLastAttempted,
-      this.redirectTo
+      guardLastAttempted
     )
   }
 

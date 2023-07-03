@@ -1,5 +1,13 @@
 import { DateTime } from 'luxon'
-import { BaseModel, beforeCreate, beforeFind, beforeSave, column } from '@ioc:Adonis/Lucid/Orm'
+import {
+  BaseModel,
+  HasMany,
+  beforeCreate,
+  beforeFind,
+  beforeSave,
+  column,
+  hasMany,
+} from '@ioc:Adonis/Lucid/Orm'
 import Hash from '@ioc:Adonis/Core/Hash'
 import { v4 as uuidv4 } from 'uuid'
 
@@ -14,7 +22,16 @@ export default class User extends BaseModel {
   public password: string
 
   @column()
-  public rememberMeToken: string
+  public name: string
+
+  @column()
+  public birth: Date
+
+  @column()
+  public gender: string
+
+  @column()
+  public profileAvatar: string
 
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime

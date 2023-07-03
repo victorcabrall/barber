@@ -9,5 +9,6 @@ Route.group(() => {
 Route.post('login', 'UsersController.login')
 
 Route.post('register', 'UsersController.register')
+Route.post('create_profile', 'UsersController.createProfile')
 
 Route.post('logout', 'UsersController.logout')
