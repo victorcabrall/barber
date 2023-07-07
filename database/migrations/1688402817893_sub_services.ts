@@ -1,14 +1,15 @@
 import BaseSchema from '@ioc:Adonis/Lucid/Schema'
 
 export default class extends BaseSchema {
-  protected tableName = 'payments'
+  protected tableName = 'sub_services'
 
   public async up() {
     this.schema.createTable(this.tableName, (table) => {
       table.string('id').primary()
-      table.decimal('amount').notNullable()
-      table.string('type_payment').notNullable()
-      table.string('status').notNullable()
+      table.string('name')
+      table.string('description')
+      table.decimal('amount')
+      table.string('service_id').references('id').inTable('services').onDelete('CASCADE')
       table.timestamp('created_at', { useTz: true })
       table.timestamp('updated_at', { useTz: true })
     })

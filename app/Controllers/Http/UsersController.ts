@@ -1,8 +1,10 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
+import Event from '@ioc:Adonis/Core/Event'
 import User from '../../Models/User'
 import axios from 'axios'
 export default class UsersController {
   public async index({ auth, response }: HttpContextContract) {
+    Event.emit('new:payment', { id: 1 })
     return response.ok(auth.user)
   }
   public async login({ auth, request, response }: HttpContextContract) {
@@ -15,7 +17,7 @@ export default class UsersController {
       })
     }
     try {
-      const dataToken = await auth.use('api').attempt(email, password, { expiresIn: '30 mins' })
+      const dataToken = await auth.use('api').attempt(email, password)
       return response.ok({
         success: true,
         user: {

@@ -13,9 +13,16 @@ export default class ServicesController {
       })
     }
   }
-  public async postServices({ auth, response }: HttpContextContract) {
+  public async postServices({ auth, request, response }: HttpContextContract) {
+    const { name, description } = request.body()
+    if (!name) {
+      return response.badRequest({ success: false, message: 'Body da requisiçao está invalida' })
+    }
     try {
-      const services = await Service.all()
+      const services = await Service.create({
+        name,
+        description,
+      })
       return response.ok({ success: true, data: services })
     } catch (e) {
       return response.internalServerError({

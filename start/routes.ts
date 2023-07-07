@@ -6,6 +6,35 @@ Route.group(() => {
 })
   .prefix('/profile')
   .middleware('auth')
+
+Route.group(() => {
+  Route.get('/', 'ServicesController.getServices')
+  Route.post('/create', 'ServicesController.postServices')
+})
+  .prefix('/services')
+  .middleware('auth')
+
+Route.group(() => {
+  Route.post('/create', 'SubServicesController.createSubService')
+  Route.get('/:id', 'SubServicesController.getSubService')
+  Route.get('/:serviceId', 'SubServicesController.getAllSubServices')
+})
+  .prefix('/sub_services')
+  .middleware('auth')
+
+Route.group(() => {
+  Route.post('/create', 'BooksController.createBook')
+  Route.post('/confirm', 'BooksController.confirmBook')
+})
+  .prefix('/book')
+  .middleware('auth')
+
+Route.group(() => {
+  Route.get('/:id', 'PaymentsController.getPayment')
+  Route.post('/create', 'PaymentsController.createPayment')
+})
+  .prefix('/payment')
+  .middleware('auth')
 Route.post('login', 'UsersController.login')
 
 Route.post('register', 'UsersController.register')

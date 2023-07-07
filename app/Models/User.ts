@@ -10,6 +10,7 @@ import {
 } from '@ioc:Adonis/Lucid/Orm'
 import Hash from '@ioc:Adonis/Core/Hash'
 import { v4 as uuidv4 } from 'uuid'
+import Book from './Book'
 
 export default class User extends BaseModel {
   @column({ isPrimary: true })
@@ -32,6 +33,9 @@ export default class User extends BaseModel {
 
   @column()
   public profileAvatar: string
+
+  @hasMany(() => Book)
+  public book: HasMany<typeof Book>
 
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime

@@ -1,11 +1,11 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import Payment from 'App/Models/Payment'
-import { postPayment, getPayment } from 'services/MercadoPagoApi'
+import { postPayment, getPayment } from '../../../services/MercadoPagoApi'
 export default class PaymentsController {
   public async createPayment({ auth, request, response }: HttpContextContract) {
     const { amount, paymentMethod, bookId } = request.body()
 
-    if (!amount || !paymentMethod) {
+    if (!amount) {
       return response.badRequest({ success: false, message: 'Body da requisiçao está invalida' })
     }
 
@@ -14,8 +14,9 @@ export default class PaymentsController {
         return response.badRequest({ success: false, message: 'Usuario retornando vazio' })
       }
       const paymentRes = await postPayment(amount, paymentMethod, auth.user.email, auth.user.id)
+      console.log(paymentRes)
       const payment = await Payment.create({
-        idTransaction: paymentRes['id'],
+        idTransation: paymentRes['id'],
         amount: paymentRes['transaction_amount'],
         typePayment: paymentRes['payment_type_id'],
         bookId: bookId,
@@ -24,16 +25,17 @@ export default class PaymentsController {
       const qrCode = paymentRes['point_of_interaction']['transaction_data']['qr_code']
 
       const paymentData = {
-        ...payment,
+        ...payment['$attributes'],
         transaction_data: qrCode,
       }
       return response.ok({ success: true, payment_data: paymentData })
     } catch (e) {
+      console.log(e)
       return response.badRequest({ success: false })
     }
   }
   public async getPayment({ auth, request, response }: HttpContextContract) {
-    const { id } = request.body()
+    const { id } = request.params()
 
     if (!id) {
       return response.badRequest({ success: false, message: 'Body da requisiçao está invalida' })
@@ -44,7 +46,7 @@ export default class PaymentsController {
       if (!payment) {
         return response.badRequest({ success: false, message: 'Pagamento nao existe ' })
       }
-      const paymentRes = await getPayment(payment.idTransaction)
+      const paymentRes = await getPayment(payment.idTransation)
       payment.status = paymentRes.status
       await payment.save()
 

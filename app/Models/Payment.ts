@@ -1,13 +1,14 @@
 import { DateTime } from 'luxon'
-import { BaseModel, beforeCreate, column } from '@ioc:Adonis/Lucid/Orm'
+import { BaseModel, BelongsTo, beforeCreate, belongsTo, column } from '@ioc:Adonis/Lucid/Orm'
 import { v4 as uuidv4 } from 'uuid'
+import Book from './Book'
 
 export default class Payment extends BaseModel {
   @column({ isPrimary: true })
   public id: string
 
   @column()
-  public idTransaction: number
+  public idTransation: number
 
   @column()
   public amount: number
@@ -17,6 +18,9 @@ export default class Payment extends BaseModel {
 
   @column()
   public bookId: string
+
+  @belongsTo(() => Book)
+  public book: BelongsTo<typeof Book>
 
   @column()
   public status: string

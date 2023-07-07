@@ -34,9 +34,6 @@ export default class Book extends BaseModel {
   @belongsTo(() => User)
   public user: BelongsTo<typeof User>
 
-  @manyToMany(() => Service)
-  public service: ManyToMany<typeof Service>
-
   @beforeCreate()
   public static addUuid(book: Book) {
     book.id = uuidv4()
