@@ -16,8 +16,8 @@ Route.group(() => {
 
 Route.group(() => {
   Route.post('/create', 'SubServicesController.createSubService')
-  Route.get('/:id', 'SubServicesController.getSubService')
-  Route.get('/:serviceId', 'SubServicesController.getAllSubServices')
+  // Route.get('/:id', 'SubServicesController.getSubService')
+  Route.get('/', 'SubServicesController.getAllSubServices')
 })
   .prefix('/sub_services')
   .middleware('auth')

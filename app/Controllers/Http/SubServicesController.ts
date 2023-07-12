@@ -11,7 +11,6 @@ export default class SubServicesController {
     }
     try {
       const service = await Service.findBy('id', serviceId)
-      console.log(service)
       if (!service) {
         return response.badRequest({
           success: false,
@@ -39,16 +38,23 @@ export default class SubServicesController {
   }
 
   public async getAllSubServices({ auth, request, response }: HttpContextContract) {
-    const { serviceId } = request.params()
-    if (!serviceId) {
+    const { id, serviceId } = request.qs()
+    if (!serviceId && !id) {
       return response.badRequest({ success: false, message: 'Body da requisiçao está invalida' })
     }
     try {
-      const subServices = await SubService.find('serviceId', serviceId)
-      if (!subServices) {
-        return response.notFound({ success: false, message: 'Sub serviço nao encontrado' })
+      let query = SubService.query()
+      if (id) {
+        query = query.where('id', id)
+      } else if (serviceId) {
+        query = query.where('serviceId', serviceId)
       }
-      return response.ok({ success: true, data: subServices })
+      const subService = await query.exec()
+      if (!subService) {
+        return response.notFound({ success: false, message: 'Sub serviço não encontrado' })
+      }
+      console.log(subService)
+      return response.ok({ success: true, data: subService})
     } catch (e) {
       return response.internalServerError({
         success: false,
